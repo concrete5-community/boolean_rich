@@ -70,7 +70,7 @@ class Controller extends BaseController
         $this->load();
         $type = $akey->addChild('type');
         $type->addAttribute('checked-by-default', $this->akCheckedByDefault);
-        $type->addChild('label', htmlspecialchars(LinkAbstractor::export($this->akCheckboxLabel)));
+        $type->addChild('label', htmlspecialchars(LinkAbstractor::export((string) $this->akCheckboxLabel), ENT_XML1));
 
         return $akey;
     }
