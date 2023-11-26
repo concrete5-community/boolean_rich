@@ -1,0 +1,14 @@
+{
+    "name": "concrete5-community/boolean_rich",
+    "description": "Provide a boolean (checkbox) attribute with a Rich Text label for Concrete CMS",
+    "type": "concrete5-package",
+    "homepage": "https://github.com/concrete5-community/boolean_rich",
+    "license": "MIT",
+    "require": {
+        "concrete5/core": "^9"
+    },
+    "support": {
+        "issues": "https://github.com/concrete5-community/boolean_rich/issues",
+        "source": "https://github.com/concrete5-community/boolean_rich"
+    }
+}
