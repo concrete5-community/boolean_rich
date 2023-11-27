@@ -5,7 +5,7 @@
     "homepage": "https://github.com/concrete5-community/boolean_rich",
     "license": "MIT",
     "require": {
-        "concrete5/core": "^9"
+        "concrete5/core": "^8.5.2 || ^9"
     },
     "support": {
         "issues": "https://github.com/concrete5-community/boolean_rich/issues",
