@@ -3,6 +3,7 @@
 namespace Concrete\Package\BooleanRich;
 
 use Concrete\Core\Attribute\Category\CategoryService;
+use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Database\EntityManager\Provider\ProviderAggregateInterface;
 use Concrete\Core\Database\EntityManager\Provider\StandardPackageProvider;
 use Concrete\Core\Package\Package;
@@ -21,7 +22,7 @@ class Controller extends Package implements ProviderAggregateInterface
      *
      * @see \Concrete\Core\Package\Package::$appVersionRequired
      */
-    protected $appVersionRequired = '9.0.0';
+    protected $appVersionRequired = '8.5.2';
 
     /**
      * {@inheritdoc}
@@ -82,15 +83,18 @@ class Controller extends Package implements ProviderAggregateInterface
      */
     public function getTranslatableStrings(Translations $translations)
     {
-        $categoryService = $this->app->make(CategoryService::class);
-        foreach ($categoryService->getList() as $categoryEntity) {
-            $category = $categoryEntity->getAttributeKeyCategory();
-            foreach ($category->getList() as $key) {
-                if ($key->getAttributeTypeHandle() === 'boolean_rich') {
-                    $settings = $key->getAttributeKeySettings();
-                    $label = (string) $settings->getCheckboxLabel();
-                    if ($label !== '') {
-                        $translations->insert('AttributeKeyLabel', $label);
+        $config = $this->app->make(Repository::class);
+        if (version_compare($config->get('concrete.version'), '9') < 0) {
+            $categoryService = $this->app->make(CategoryService::class);
+            foreach ($categoryService->getList() as $categoryEntity) {
+                $category = $categoryEntity->getAttributeKeyCategory();
+                foreach ($category->getList() as $key) {
+                    if ($key->getAttributeTypeHandle() === 'boolean_rich') {
+                        $settings = $key->getAttributeKeySettings();
+                        $label = (string) $settings->getCheckboxLabel();
+                        if ($label !== '') {
+                            $translations->insert('AttributeKeyLabel', $label);
+                        }
                     }
                 }
             }

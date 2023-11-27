@@ -6,6 +6,7 @@ defined('C5_EXECUTE') or die('Access Denied.');
 
 use Concrete\Attribute\Boolean\Controller as BaseController;
 use Concrete\Core\Attribute\FontAwesomeIconFormatter;
+use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Editor\LinkAbstractor;
 use SimpleXMLElement;
 
@@ -18,7 +19,18 @@ class Controller extends BaseController
      */
     public function getIconFormatter()
     {
-        return new FontAwesomeIconFormatter('check-double');
+        return new FontAwesomeIconFormatter(version_compare($this->getCoreVersion(), '9') < 0 ? 'check-circle' : 'check-double');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @see \Concrete\Attribute\Boolean\Controller::form();
+     */
+    public function form()
+    {
+        parent::form();
+        $this->set('coreVersion', $this->getCoreVersion());
     }
 
     /**
@@ -29,6 +41,7 @@ class Controller extends BaseController
     public function type_form()
     {
         parent::type_form();
+        $this->set('coreVersion', $this->getCoreVersion());
         $this->set('editor', $this->app->make('editor'));
     }
 
@@ -89,5 +102,13 @@ class Controller extends BaseController
         }
 
         return $type;
+    }
+
+    /**
+     * @return string
+     */
+    private function getCoreVersion()
+    {
+        return $this->app->make(Repository::class)->get('concrete.version');
     }
 }
