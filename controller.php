@@ -15,7 +15,7 @@ class Controller extends Package implements ProviderAggregateInterface
 {
     protected $pkgHandle = 'boolean_rich';
 
-    protected $pkgVersion = '1.0.0';
+    protected $pkgVersion = '1.1.0';
 
     /**
      * {@inheritdoc}
