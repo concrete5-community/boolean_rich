@@ -15,6 +15,6 @@ defined('C5_EXECUTE') or die('Access Denied.');
 <div class="form-check ccm-boolean-rich">
     <input class="form-check-input" type="checkbox" value="1" name="<?= $view->field('value') ?>" id="<?= $view->field('value') ?>"<?= $checked ? ' checked="checked"' : '' ?>>
     <label class="form-check-label" for="<?= $view->field('value') ?>">
-        <?= t($controller->getCheckboxLabel()) ?>
+        <?= $controller->getCheckboxLabel() ?>
     </label>
 </div>

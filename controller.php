@@ -88,9 +88,9 @@ class Controller extends Package implements ProviderAggregateInterface
             foreach ($category->getList() as $key) {
                 if ($key->getAttributeTypeHandle() === 'boolean_rich') {
                     $settings = $key->getAttributeKeySettings();
-                    $label = $settings->getCheckboxLabel();
-                    if ($label) {
-                        $translations->insert('', $label);
+                    $label = (string) $settings->getCheckboxLabel();
+                    if ($label !== '') {
+                        $translations->insert('AttributeKeyLabel', $label);
                     }
                 }
             }

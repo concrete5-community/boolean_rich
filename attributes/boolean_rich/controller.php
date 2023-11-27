@@ -54,10 +54,10 @@ class Controller extends BaseController
     public function getCheckboxLabel()
     {
         if ($this->akCheckboxLabel) {
-            return LinkAbstractor::translateFrom(t($this->akCheckboxLabel));
+            return LinkAbstractor::translateFrom(tc('AttributeKeyLabel', $this->akCheckboxLabel));
         }
 
-        return h(t($this->attributeKey->getAttributeKeyDisplayName('text')));
+        return $this->attributeKey->getAttributeKeyDisplayName('html');
     }
 
     /**
