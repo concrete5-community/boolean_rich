@@ -25,7 +25,7 @@ class Controller extends BaseController
     /**
      * {@inheritdoc}
      *
-     * @see \Concrete\Attribute\Boolean\Controller::form();
+     * @see \Concrete\Attribute\Boolean\Controller::form()
      */
     public function form()
     {
@@ -36,7 +36,7 @@ class Controller extends BaseController
     /**
      * {@inheritdoc}
      *
-     * @see \Concrete\Attribute\Boolean\Controller::type_form();
+     * @see \Concrete\Attribute\Boolean\Controller::type_form()
      */
     public function type_form()
     {
@@ -48,7 +48,7 @@ class Controller extends BaseController
     /**
      * {@inheritdoc}
      *
-     * @see \Concrete\Attribute\Boolean\Controller::saveKey();
+     * @see \Concrete\Attribute\Boolean\Controller::saveKey()
      */
     public function saveKey($data)
     {
