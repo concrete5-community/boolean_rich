@@ -8,10 +8,17 @@ use Concrete\Attribute\Boolean\Controller as BaseController;
 use Concrete\Core\Attribute\FontAwesomeIconFormatter;
 use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Editor\LinkAbstractor;
+use Concrete\Core\Error\UserMessageException;
+use Concrete\Core\Http\ResponseFactoryInterface;
 use SimpleXMLElement;
 
 class Controller extends BaseController
 {
+    /**
+     * @private
+     */
+    const MAX_LABEL_LENGTH = 255;
+
     /**
      * {@inheritdoc}
      *
@@ -41,8 +48,18 @@ class Controller extends BaseController
     public function type_form()
     {
         parent::type_form();
+        $sets = $this->getSets();
+        if ($this->request->isPost() && $this->request->request->has('akCheckboxLabel')) {
+            $akCheckboxLabel = $this->request->request->get('akCheckboxLabel');
+        } else {
+            $akCheckboxLabel = isset($sets['akCheckboxLabel']) ? LinkAbstractor::translateFromEditMode($sets['akCheckboxLabel']) : '';
+        }
+        $this->set('akCheckboxLabel', $akCheckboxLabel);
+        $this->set('akCheckboxLabelLength', function_exists('mb_strlen') ? mb_strlen($akCheckboxLabel) : strlen($akCheckboxLabel));
         $this->set('coreVersion', $this->getCoreVersion());
         $this->set('editor', $this->app->make('editor'));
+        $this->set('maxLabelLength', static::MAX_LABEL_LENGTH);
+        $this->set('token', $this->app->make('token'));
     }
 
     /**
@@ -54,7 +71,7 @@ class Controller extends BaseController
     {
         $type = parent::saveKey($data);
         /** @var \Concrete\Core\Entity\Attribute\Key\Settings\BooleanSettings $type */
-        $type->setCheckboxLabel(LinkAbstractor::translateTo($type->getCheckboxLabel()));
+        $type->setCheckboxLabel(LinkAbstractor::translateTo((string) $type->getCheckboxLabel()));
 
         return $type;
     }
@@ -102,6 +119,18 @@ class Controller extends BaseController
         }
 
         return $type;
+    }
+
+    public function action_checkLength()
+    {
+        $token = $this->app->make('token');
+        if (!$token->validate('boolean_rich_check_length')) {
+            throw new UserMessageException($token->getErrorMessage());
+        }
+        $text = LinkAbstractor::translateTo((string) $this->request->request->get('label'));
+        $length = function_exists('mb_strlen') ? mb_strlen($text) : strlen($text);
+
+        return $this->app->make(ResponseFactoryInterface::class)->json($length);
     }
 
     /**
