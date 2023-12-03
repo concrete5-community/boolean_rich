@@ -31,7 +31,7 @@ class Controller extends Package implements ProviderAggregateInterface
      */
     public function getPackageName()
     {
-        return t('Boolean (Rich Text)');
+        return t('Checkbox attribute with Rich Text');
     }
 
     /**
@@ -41,7 +41,7 @@ class Controller extends Package implements ProviderAggregateInterface
      */
     public function getPackageDescription()
     {
-        return t('Provide a boolean (checkbox) attribute with a Rich Text label.');
+        return t('Provide a checkbox (boolean) attribute with a rich text label.');
     }
 
     /**
