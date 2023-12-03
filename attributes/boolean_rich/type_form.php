@@ -169,7 +169,11 @@ function displayCounter(len) {
                     }
                     e.preventDefault();
                     const message = <?= json_encode(t('The label of the checkbox is too long: please shorten it.')) ?>;
-                    window?.ConcreteAlert?.error({message}) ?? window.alert(message);
+                    if (window?.ConcreteAlert?.error) {
+                        window.ConcreteAlert.error({message});
+                    } else {
+                        window.alert(message);
+                    }
                 });
                 hooked = true;
             }
