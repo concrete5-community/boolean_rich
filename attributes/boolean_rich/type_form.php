@@ -117,10 +117,49 @@ function initialize(){
     updateCounter();
 };
 
+const loading = (function() {
+    let data = null;
+    const updateDots = () => {
+        if (data === null) {
+            return;
+        }
+        data.dots = (data.dots + 1) % 3;
+        data.element.textContent = '.'.repeat(data.dots + 1);
+    };
+    return {
+        show: () => {
+            if (data !== null) {
+                return;
+            }
+            data = {
+                timer: setInterval(() => updateDots(), 200),
+                dots: -1,
+                element: document.querySelector('#akCheckboxLabelLength'),
+            };
+            element.classList.remove('text-success', 'text-danger');
+            updateDots();
+        },
+        hide: () => {
+            if (data === null) {
+                return;
+            }
+            clearInterval(data.timer);
+            data.element.textContent = '';
+            data = null;
+        },
+    };
+})();
+
 const ALREADY_SEEN = <?= json_encode(['' => 0, $akCheckboxLabel => $akCheckboxLabelLength])?>;
 
 function startUpdateCounter() {
+    loading.show();
     clearTimeout(updateTimer);
+    const label = editor ? editor.getData() : element.value;
+    if (ALREADY_SEEN.hasOwnProperty(label) && ALREADY_SEEN.hasOwnProperty(label) !== null) {
+        displayCounter(ALREADY_SEEN[label]);
+        return;
+    }
     updateTimer = setTimeout(() => updateCounter(), 200);
 }
 
@@ -155,11 +194,20 @@ async function updateCounter() {
 }
 
 function displayCounter(len) {
+    loading.hide();
+    const element = document.querySelector('#akCheckboxLabelLength');
+    element.textContent = len.toString();
+    if (len <= <?= $maxLabelLength ?>) {
+        element.classList.remove('text-danger');
+        element.classList.add('text-success');
+    } else {
+        element.classList.remove('text-success');
+        element.classList.add('text-danger');
+    }
     if (currentLabelLength === len) {
         return;
     }
     currentLabelLength = len;
-    document.querySelector('#akCheckboxLabelLength').innerHTML = len.toString();
     if (currentLabelLength > <?= $maxLabelLength ?> && !hooked) {
         for (let el = element; el = el.parentElement; el && !hooked) {
             if (el.tagName === 'FORM') {
